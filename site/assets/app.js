@@ -147,8 +147,8 @@
       a: `Ha, ochiq REST API: <a href="${docs}" target="_blank" rel="noopener">Swagger hujjatlari</a>. JWT bilan autentifikatsiya; reja, darslar, Mentor chat, manbalar va progress — hammasi API orqali.` },
     { q: "Qaysi AI modellar ishlatiladi?", k: ["model", "openai", "ai", "4o", "embedding", "whisper", "tts", "rag"],
       a: "Reja va diagnostika — GPT-4o, kundalik suhbat va baholash — GPT-4o-mini (tez va arzon). Manbalardan javob — embeddings + pgvector (RAG). Ovoz — Whisper va OpenAI TTS." },
-    { q: "Jamoa kimlar?", k: ["jamoa", "kim", "asoschi", "founder", "husan", "team"],
-      a: "Asoschi — Husan (full-stack va AI engineer): arxitektura, backend, frontend va AI agentlar. Jamoa kengaymoqda: dizayner, metodist va growth rollari ochiq. Batafsil — <a href=\"/#jamoa\">Jamoa</a> bo'limida." },
+    { q: "Jamoa kimlar?", k: ["jamoa", "kim", "asoschi", "founder", "husan", "team", "malikov", "abdujalol", "azam"],
+      a: "Husan \u2014 asoschi, full-stack va AI engineer. Malikov Abdujalol \u2014 frontend developer. Malikov A'zam \u2014 adviser va backend developer. Dizayner, metodist va growth rollari ochiq. Batafsil: <a href=\"/#jamoa\">Jamoa</a> bo'limida." },
     { q: "Keyingi rejalar?", k: ["reja", "keyingi", "kelajak", "roadmap", "launch", "maqsad", "b2b"],
       a: "Pilot guruh bilan sinov (2026 oxiri), Payme/Click va o'zbekcha ovoz (2027 boshi), keyin o'quv markazlari uchun B2B Team panel. Batafsil — <a href=\"/#reja\">Reja</a> bo'limida." },
   ];
