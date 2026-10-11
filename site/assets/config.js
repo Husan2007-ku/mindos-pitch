@@ -16,8 +16,8 @@ window.MINDOS_CONFIG = {
   // Demo-video. YouTube'ga "Unlisted" qilib yuklang va faqat ID'ni qo'ying:
   // https://www.youtube.com/watch?v=AbC123xyz  ->  "AbC123xyz"
   video: {
-    youtubeId: "",
-    duration: "\u2248 4 daqiqa",
+    youtubeId: "x4xEy1hEQBY",
+    duration: "4:27",
   },
 
   // Jamoa. Yangi a'zo qo'shish uchun shu massivga obyekt qo'shing.
