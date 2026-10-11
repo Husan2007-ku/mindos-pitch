@@ -1,5 +1,3 @@
-/* MindOS Pitch — "katakli daftar" vizual tizimi.
-   Siyoh-ko'k matn, qizil hoshiya chizig'i, sariq marker — o'quvchi daftaridan. */
 :root {
   --paper: #f4f7fb;
   --paper-2: #ffffff;
@@ -146,9 +144,8 @@ mark { background: linear-gradient(transparent 55%, var(--marker) 55%); color: i
 .feat code, .api code { font-family: var(--mono); font-size: 0.88em; background: var(--siyoh-soft); padding: 1px 5px; border-radius: 4px; color: var(--siyoh); }
 
 /* ---------- Team ---------- */
-.team { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: start; }
+#team-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 16px; align-items: stretch; }
 .member { background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-l); padding: 26px; }
-.member + .member { margin-top: 16px; }
 .member-top { display: flex; gap: 16px; align-items: center; margin-bottom: 14px; }
 .avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--siyoh); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 22px; flex: none; }
 .member h3 { font-size: 22px; }
@@ -292,7 +289,7 @@ footer { border-top: 1px solid var(--line); background: var(--paper-2); }
 @media (max-width: 980px) {
   :root { --gutter: 36px; }
   .sec-no { position: static; display: block; text-align: left; width: auto; font-size: 34px; margin-bottom: 4px; }
-  .hero, .team, .api, .demo-cols { grid-template-columns: 1fr; }
+  .hero, .api, .demo-cols { grid-template-columns: 1fr; }
   .ps { grid-template-columns: 1fr; }
   .ps-arrow { transform: rotate(90deg); justify-self: start; }
   .flow ol { grid-template-columns: 1fr; gap: 26px; }

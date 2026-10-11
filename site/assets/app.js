@@ -1,11 +1,9 @@
-/* MindOS Pitch — sahifa logikasi: config'dan render, nusxa olish, FAQ chatbot. */
 (function () {
   "use strict";
 
   const CFG = window.MINDOS_CONFIG || {};
   const LINKS = CFG.links || {};
 
-  /* ---------- helpers ---------- */
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
@@ -21,7 +19,6 @@
     return node;
   }
 
-  // Faqat http(s) havolalarga ruxsat — config'dagi xato URL sahifani buzmasin.
   function safeUrl(url) {
     try {
       const u = new URL(url, location.href);
@@ -33,7 +30,6 @@
     return String(name || "?").trim().split(/\s+/).map((p) => p[0]).slice(0, 2).join("").toUpperCase();
   }
 
-  /* ---------- config → DOM ---------- */
   function applyLinks() {
     $$("[data-link]").forEach((a) => {
       const url = safeUrl(LINKS[a.dataset.link]);
@@ -60,25 +56,17 @@
           el("div", {}, [el("h3", { text: m.name }), el("div", { class: "role", text: m.role })]),
         ]),
         m.bio ? el("p", { text: m.bio }) : null,
-        el("ul", { class: "chips", "aria-label": "Ko'nikmalar" }, (m.skills || []).map((s) => el("li", { text: s }))),
-        links,
+        (m.skills || []).length ? el("ul", { class: "chips", "aria-label": "Ko'nikmalar" }, m.skills.map((s) => el("li", { text: s }))) : null,
+        links.childElementCount ? links : null,
       ]));
     });
 
-    const roles = $("#open-roles");
-    const list = CFG.openRoles || [];
-    if (roles && list.length) {
-      list.forEach((r) => roles.append(el("li", {}, [el("b", { text: r.role }), el("span", { text: r.why })])));
-    } else if (roles) {
-      roles.closest(".roles").remove();
-    }
   }
 
   function renderDemo() {
     const video = $("#video");
     if (!video) return;
     const id = String((CFG.video || {}).youtubeId || "").trim();
-    // YouTube ID faqat [A-Za-z0-9_-] — boshqa narsa bo'lsa embed qilinmaydi.
     if (/^[A-Za-z0-9_-]{6,20}$/.test(id)) {
       video.innerHTML = "";
       video.append(el("iframe", {
@@ -117,14 +105,12 @@
     });
   }
 
-  /* ---------- FAQ chatbot ---------- */
   const app = safeUrl(LINKS.app) || "#";
   const docs = safeUrl(LINKS.apiDocs) || "#";
 
-  // Javoblar ishonchli (biz yozgan) HTML. Foydalanuvchi matni hech qachon innerHTML'ga tushmaydi.
   const KB = [
     { q: "MindOS nima?", k: ["mindos", "haqida", "tushuntir", "loyiha", "platforma"],
-      a: "MindOS — shaxsiy AI ustoz. Maqsadingizdan o'quv reja tuzadi, har kuni suhbat orqali dars beradi, uy vazifani tekshiradi va o'rganganingizni unutishdan oldin eslatadi." },
+      a: "MindOS shaxsiy AI ustoz. U maqsadingizdan o'quv reja tuzadi, har kuni suhbat orqali dars beradi, uy vazifani tekshiradi va o'rganganingizni unutishdan oldin eslatadi." },
     { q: "Qanday ishlaydi?", k: ["ishlaydi", "jarayon", "bosqich", "qadam"],
       a: "5 qadam: 1) AI diagnostika darajangizni aniqlaydi, 2) shaxsiy reja tuziladi, 3) Mentor jonli dars o'tadi, 4) uy vazifani AI baholaydi, 5) tushunchalar SM-2 bo'yicha takrorlanadi." },
     { q: "ChatGPT'dan farqi nima?", k: ["chatgpt", "gpt", "farq", "farqi", "nega", "oddiy"],
@@ -132,30 +118,29 @@
     { q: "Qaysi fanlarni o'rgatadi?", k: ["fan", "fanlar", "mavzu", "ielts", "ingliz", "python", "dasturlash", "matematika", "orgat"],
       a: "Istalgan mavzu: reja mavzuga qarab tuziladi. IELTS Speaking uchun alohida imtihonchi rejimi, dasturlash uchun Code Mentor bor. O'z darsligingizni (PDF, DOCX, YouTube) yuklab, shundan o'rganish ham mumkin." },
     { q: "Narxi qancha?", k: ["narx", "narxi", "pul", "tarif", "pro", "bepul", "tolov", "qancha"],
-      a: "Hozirgi tariflar: Free — $0, Pro — $9/oy, Team — $29/oy. Free'da asosiy funksiyalar va kuniga 3 ta ovozli javob bor. Keyingi bosqichda Payme/Click va so'mdagi narxlar rejalashtirilgan." },
+      a: "Hozirgi tariflar: Free $0, Pro $9/oy, Team $29/oy. Free'da asosiy funksiyalar va kuniga 3 ta ovozli javob bor. Keyingi bosqichda Payme/Click va so'mdagi narxlar rejalashtirilgan." },
     { q: "O'zbek tilida ishlaydimi?", k: ["ozbek", "uzbek", "til", "tilida", "rus", "lang"],
       a: "Ha. Interfeys va Mentor o'zbek tilida. Ingliz tili darslarida (masalan IELTS Speaking) Mentor kerakli joyda inglizchaga o'tadi." },
     { q: "Spaced repetition nima?", k: ["spaced", "repetition", "takror", "takrorlash", "sm2", "unut", "esla", "kartochka"],
-      a: "Bu — har bir tushunchani unutishga yaqin qolgan paytda qaytarish usuli. MindOS dars tugagach kartochkalar yaratadi va SM-2 algoritmi bilan qachon qaytarishni hisoblaydi. Internet bo'lmasa ham ishlaydi." },
+      a: "Bu har bir tushunchani unutishga yaqin qolgan paytda qaytarish usuli. MindOS dars tugagach kartochkalar yaratadi va SM-2 algoritmi bilan qachon qaytarishni hisoblaydi. Internet bo'lmasa ham ishlaydi." },
     { q: "Telegram bot bormi?", k: ["telegram", "bot", "eslatma", "push", "xabar"],
       a: "Ha. Telegram bot kunlik dars eslatmasini yuboradi va streak uzilish xavfi haqida ogohlantiradi. Telegram'ni ulamaganlar uchun brauzer push-bildirishnomalari bor." },
     { q: "Ma'lumotlarim xavfsizmi?", k: ["xavfsiz", "maxfiy", "malumot", "parol", "ochir", "privacy"],
       a: "Parollar bcrypt bilan xeshlanadi, kirish JWT tokenlar orqali. Akkauntingizni barcha ma'lumotlari bilan istalgan payt to'liq o'chirishingiz mumkin." },
     { q: "Qanday sinab ko'raman?", k: ["sinab", "sina", "demo", "kirish", "royxat", "prototip", "link", "havola"],
-      a: `Prototip ochiq: <a href="${app}" target="_blank" rel="noopener">MindOS'ni ochish</a>. Ro'yxatdan o'ting, mavzu kiriting — 1 daqiqada shaxsiy reja tayyor. Demo-videoni <a href="/demo">/demo</a> sahifasida ko'ring.` },
+      a: `Prototip ochiq: <a href="${app}" target="_blank" rel="noopener">MindOS'ni ochish</a>. Ro'yxatdan o'ting, mavzu kiriting va 1 daqiqada shaxsiy reja tayyor. Demo-videoni <a href="/demo">/demo</a> sahifasida ko'ring.` },
     { q: "API bormi?", k: ["api", "integratsiya", "swagger", "endpoint", "developer"],
-      a: `Ha, ochiq REST API: <a href="${docs}" target="_blank" rel="noopener">Swagger hujjatlari</a>. JWT bilan autentifikatsiya; reja, darslar, Mentor chat, manbalar va progress — hammasi API orqali.` },
+      a: `Ha, ochiq REST API: <a href="${docs}" target="_blank" rel="noopener">Swagger hujjatlari</a>. JWT bilan autentifikatsiya; reja, darslar, Mentor chat, manbalar va progress: hammasi API orqali.` },
     { q: "Qaysi AI modellar ishlatiladi?", k: ["model", "openai", "ai", "4o", "embedding", "whisper", "tts", "rag"],
-      a: "Reja va diagnostika — GPT-4o, kundalik suhbat va baholash — GPT-4o-mini (tez va arzon). Manbalardan javob — embeddings + pgvector (RAG). Ovoz — Whisper va OpenAI TTS." },
-    { q: "Jamoa kimlar?", k: ["jamoa", "kim", "asoschi", "founder", "husan", "team", "malikov", "abdujalol", "azam"],
-      a: "Husan \u2014 asoschi, full-stack va AI engineer. Malikov Abdujalol \u2014 frontend developer. Malikov A'zam \u2014 adviser va backend developer. Dizayner, metodist va growth rollari ochiq. Batafsil: <a href=\"/#jamoa\">Jamoa</a> bo'limida." },
+      a: "Reja va diagnostika uchun GPT-4o, kundalik suhbat va baholash uchun GPT-4o-mini (tez va arzon). Manbalardan javob: embeddings + pgvector (RAG). Ovoz: Whisper va OpenAI TTS." },
+    { q: "Jamoa kimlar?", k: ["jamoa", "kim", "asoschi", "founder", "husan", "team", "malikov", "abdujalol", "azam", "miraziz", "nozima", "investor", "adviser"],
+      a: "Husan Malikov: asoschi, full-stack va AI engineer. Miraziz: frontend developer. Nozima: UI/UX dizayner. Malikov A'zam: adviser. Malikov Abdujalol: angel investor. Batafsil: <a href=\"/#jamoa\">Jamoa</a> bo'limida." },
     { q: "Keyingi rejalar?", k: ["reja", "keyingi", "kelajak", "roadmap", "launch", "maqsad", "b2b"],
-      a: "Pilot guruh bilan sinov (2026 oxiri), Payme/Click va o'zbekcha ovoz (2027 boshi), keyin o'quv markazlari uchun B2B Team panel. Batafsil — <a href=\"/#reja\">Reja</a> bo'limida." },
+      a: "Pilot guruh bilan sinov (2026 oxiri), Payme/Click va o'zbekcha ovoz (2027 boshi), keyin o'quv markazlari uchun B2B Team panel. Batafsil: <a href=\"/#reja\">Reja</a> bo'limida." },
   ];
 
   const SUGGEST = ["MindOS nima?", "ChatGPT'dan farqi nima?", "Narxi qancha?", "Qanday sinab ko'raman?"];
 
-  // O'zbekcha apostrof variantlari (o' o‘ oʻ o’) — barchasini olib tashlab solishtiramiz.
   function norm(s) {
     return String(s || "")
       .toLowerCase()
